@@ -1,0 +1,16 @@
+{
+  "$schema": "sublime://packagecontrol.io/schemas/repository",
+  "schema_version": "4.0.0",
+  "packages": [
+    {
+      "name": "JBeam",
+      "details": "https://github.com/NateCroix/sublime_jbeam_syntax",
+      "releases": [
+        {
+          "sublime_text": "*",
+          "version": "1.0"
+        }
+      ]
+    }
+  ]
+}

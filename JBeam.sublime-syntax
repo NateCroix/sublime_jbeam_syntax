@@ -1,0 +1,203 @@
+%YAML 1.2
+---
+# JBeam Syntax Definition for Sublime Text
+# Based on BeamNG's vscode-jbeam-editor TextMate grammar
+# JBeam is a JSON-like format with C-style comments and relaxed syntax
+name: JBeam
+scope: source.jbeam
+file_extensions:
+  - jbeam
+first_line_match: '^\s*\{'
+
+variables:
+  # jBeam section keywords (top-level object keys with special meaning)
+  section_keywords: |-
+    (?x:
+      information|slotType|slots|slots2|flexbodies|props|nodes|beams|
+      triangles|quads|rails|slidenodes|torsionbars|torsionHydros|
+      hydros|rotators|commands|pressureWheels|powertrain|
+      mainEngine|engine|gearbox|torqueConverter|turbocharger|
+      supercharger|nitrousOxideInjection|controller|
+      soundConfig|soundConfigExhaust|sounds|refNodes|cameraExternal|
+      cameraChase|cameraDash|variables|globalsBehavior|
+      managedStorage|triggers|electronicStability|tractionControl|
+      antiLockBrakes|wheelAlignmentCoef|activeDiffControl|
+      components|glowMap|input|energyStorage|clutch|transfercase|
+      gauges|gauge|licenseplateFormat|events
+    )
+  # Property value keywords
+  property_keywords: |-
+    (?x:
+      coreSlot|default|nodeWeight|beamSpring|beamDamp|
+      beamStrength|beamDeform|breakGroup|group|nodeOffset|
+      selfCollision|collision|frictionCoef|nodeMaterial|
+      optional|description|nodeMove
+    )
+
+contexts:
+  prototype:
+    - include: comments
+
+  main:
+    - include: value
+
+  # ── Values ──────────────────────────────────────────────────────
+  value:
+    - include: constant
+    - include: number
+    - include: string
+    - include: array
+    - include: object
+
+  # ── Constants ───────────────────────────────────────────────────
+  constant:
+    - match: \b(true|false)\b
+      scope: constant.language.boolean.jbeam
+    - match: \b(null)\b
+      scope: constant.language.null.jbeam
+
+  # ── Numbers ─────────────────────────────────────────────────────
+  number:
+    - match: |-
+        (?x)
+        -?
+        (?:0|[1-9]\d*|0\d+)   # allow leading zeros (jbeam quirk)
+        (?:
+          (?:\.\d+)?
+          (?:[eE][+-]?\d+)?
+        )?
+        (?=\s|,|\]|\}|/|$)
+      scope: constant.numeric.jbeam
+
+  # ── Strings ─────────────────────────────────────────────────────
+  string:
+    - match: '"'
+      scope: punctuation.definition.string.begin.jbeam
+      push: inside-string
+
+  inside-string:
+    - meta_include_prototype: false
+    - meta_scope: string.quoted.double.jbeam
+    - match: '"'
+      scope: punctuation.definition.string.end.jbeam
+      pop: true
+    - include: string-escape
+    - match: \n
+      scope: invalid.illegal.unclosed-string.jbeam
+      pop: true
+
+  string-escape:
+    - match: |-
+        (?x)
+        \\
+        (?:
+          ["\\/bfnrt]
+          |
+          u[0-9a-fA-F]{4}
+        )
+      scope: constant.character.escape.jbeam
+    - match: \\.
+      scope: invalid.illegal.unrecognized-string-escape.jbeam
+
+  # ── Arrays ──────────────────────────────────────────────────────
+  array:
+    - match: \[
+      scope: punctuation.definition.array.begin.jbeam
+      push: inside-array
+
+  inside-array:
+    - meta_scope: meta.structure.array.jbeam
+    - match: \]
+      scope: punctuation.definition.array.end.jbeam
+      pop: true
+    - include: value
+    - match: ','
+      scope: punctuation.separator.array.jbeam
+
+  # ── Objects ─────────────────────────────────────────────────────
+  object:
+    - match: \{
+      scope: punctuation.definition.dictionary.begin.jbeam
+      push: inside-object
+
+  inside-object:
+    - meta_scope: meta.structure.dictionary.jbeam
+    - match: \}
+      scope: punctuation.definition.dictionary.end.jbeam
+      pop: true
+    - include: object-key
+    - match: ':'
+      scope: punctuation.separator.dictionary.key-value.jbeam
+      push: object-value
+    - match: ','
+      scope: punctuation.separator.dictionary.pair.jbeam
+
+  object-key:
+    # Section keywords get special highlighting
+    - match: '(")({{section_keywords}})(")'
+      captures:
+        1: punctuation.definition.string.begin.jbeam
+        2: support.type.section-name.jbeam
+        3: punctuation.definition.string.end.jbeam
+    # Property modifier keywords
+    - match: '(")({{property_keywords}})(")'
+      captures:
+        1: punctuation.definition.string.begin.jbeam
+        2: entity.other.attribute-name.modifier.jbeam
+        3: punctuation.definition.string.end.jbeam
+    # Regular object keys
+    - match: '"'
+      scope: punctuation.definition.string.begin.jbeam
+      push: inside-object-key
+
+  inside-object-key:
+    - meta_include_prototype: false
+    - clear_scopes: 1  # clear meta.structure.dictionary
+    - meta_scope: meta.structure.dictionary.key.jbeam string.quoted.double.jbeam support.type.property-name.jbeam
+    - match: '"'
+      scope: punctuation.definition.string.end.jbeam
+      pop: true
+    - include: string-escape
+
+  object-value:
+    - meta_scope: meta.structure.dictionary.value.jbeam
+    - include: value
+    - match: (?=[,\}])
+      pop: true
+    - match: (?=\})
+      pop: true
+
+  # ── Comments ────────────────────────────────────────────────────
+  comments:
+    # Documentation block comments /** ... */
+    - match: /\*\*(?!/)
+      scope: punctuation.definition.comment.begin.jbeam
+      push: inside-doc-comment
+    # Block comments /* ... */
+    - match: /\*
+      scope: punctuation.definition.comment.begin.jbeam
+      push: inside-block-comment
+    # Line comments //
+    - match: //
+      scope: punctuation.definition.comment.jbeam
+      push: inside-line-comment
+
+  inside-doc-comment:
+    - meta_include_prototype: false
+    - meta_scope: comment.block.documentation.jbeam
+    - match: \*/
+      scope: punctuation.definition.comment.end.jbeam
+      pop: true
+
+  inside-block-comment:
+    - meta_include_prototype: false
+    - meta_scope: comment.block.jbeam
+    - match: \*/
+      scope: punctuation.definition.comment.end.jbeam
+      pop: true
+
+  inside-line-comment:
+    - meta_include_prototype: false
+    - meta_scope: comment.line.double-slash.jbeam
+    - match: $\n?
+      pop: true

@@ -1,0 +1,142 @@
+{
+    // JBeam Light Color Scheme for Sublime Text
+    // Colors matched to VS Code Light+ theme for 1:1 consistency
+    "name": "JBeam Light",
+    "author": "BeamNG Modding Community",
+    "variables":
+    {
+        // Base palette (VS Code Light+)
+        "bg":              "#ffffff",
+        "fg":              "#000000",
+
+        // Syntax colors (VS Code Light+ exact values)
+        "string":          "#a31515",
+        "string_escape":   "#ee0000",
+        "property":        "#0451a5",
+        "number":          "#098658",
+        "constant":        "#0000ff",
+        "comment":         "#008000",
+        "keyword":         "#af00db",
+        "teal":            "#267f99",
+
+        // UI
+        "gutter":          "#237893",
+        "selection":       "#add6ff",
+        "line_hl":         "#f0f0f0",
+        "find_hl":         "#e8c400"
+    },
+    "globals":
+    {
+        "background":                   "var(bg)",
+        "foreground":                   "var(fg)",
+        "caret":                        "#000000",
+        "line_highlight":               "var(line_hl)",
+        "selection":                    "var(selection)",
+        "selection_border":             "var(selection)",
+        "inactive_selection":           "#e5ebf1",
+        "find_highlight":               "var(find_hl)",
+        "find_highlight_foreground":    "#000000",
+        "gutter":                       "var(bg)",
+        "gutter_foreground":            "var(gutter)",
+        "brackets_options":             "underline",
+        "brackets_foreground":          "var(number)",
+        "bracket_contents_options":     "underline",
+        "bracket_contents_foreground":  "var(teal)"
+    },
+    "rules":
+    [
+        // ── Comments (VS Code Light+: green #008000) ─────────────
+        {
+            "name": "Comment",
+            "scope": "comment.line, comment.block",
+            "foreground": "var(comment)",
+            "font_style": "italic"
+        },
+        {
+            "name": "Doc Comment",
+            "scope": "comment.block.documentation",
+            "foreground": "var(comment)",
+            "font_style": "italic"
+        },
+
+        // ── Strings (VS Code Light+: dark red #A31515) ──────────
+        {
+            "name": "String",
+            "scope": "string.quoted.double.jbeam",
+            "foreground": "var(string)"
+        },
+        {
+            "name": "String Escape",
+            "scope": "constant.character.escape.jbeam",
+            "foreground": "var(string_escape)"
+        },
+        {
+            "name": "String Punctuation",
+            "scope": "punctuation.definition.string",
+            "foreground": "var(string)"
+        },
+
+        // ── Object Keys (VS Code Light+: dark blue #0451A5) ─────
+        {
+            "name": "Property Name",
+            "scope": "support.type.property-name.jbeam",
+            "foreground": "var(property)"
+        },
+        {
+            "name": "Section Name (nodes, beams, etc.)",
+            "scope": "support.type.section-name.jbeam",
+            "foreground": "var(keyword)",
+            "font_style": "bold"
+        },
+        {
+            "name": "Modifier Property (coreSlot, default, etc.)",
+            "scope": "entity.other.attribute-name.modifier.jbeam",
+            "foreground": "var(teal)",
+            "font_style": "italic"
+        },
+
+        // ── Constants (VS Code Light+: blue #0000FF) ─────────────
+        {
+            "name": "Boolean",
+            "scope": "constant.language.boolean.jbeam",
+            "foreground": "var(constant)"
+        },
+        {
+            "name": "Null",
+            "scope": "constant.language.null.jbeam",
+            "foreground": "var(constant)"
+        },
+
+        // ── Numbers (VS Code Light+: dark green #098658) ────────
+        {
+            "name": "Number",
+            "scope": "constant.numeric.jbeam",
+            "foreground": "var(number)"
+        },
+
+        // ── Punctuation (VS Code Light+: foreground #000000) ────
+        {
+            "name": "Braces & Brackets",
+            "scope": "punctuation.definition.dictionary, punctuation.definition.array",
+            "foreground": "var(fg)"
+        },
+        {
+            "name": "Colon Separator",
+            "scope": "punctuation.separator.dictionary.key-value",
+            "foreground": "var(fg)"
+        },
+        {
+            "name": "Comma Separator",
+            "scope": "punctuation.separator.dictionary.pair, punctuation.separator.array",
+            "foreground": "var(fg)"
+        },
+
+        // ── Invalid ─────────────────────────────────────────────
+        {
+            "name": "Invalid - Illegal",
+            "scope": "invalid.illegal",
+            "foreground": "#cd3131",
+            "background": "#cd313122"
+        }
+    ]
+}
