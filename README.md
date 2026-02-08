@@ -61,17 +61,16 @@ These top-level object keys receive bold styling to help navigate large jBeam fi
 
 If you want VS Code-style colors, use the included `JBeam Dark` scheme or install a "VS Code Dark+" theme for Sublime Text. I recommended applying these only for .jbeam files. It still looks fine with Sublime defaults or whatever scheme you already like without this step.
 
-To apply vs-code style colors only for `.jbeam` files, add this to your user settings:
+To apply vs-code style colors only for `.jbeam` files:
+
+1. Open any `.jbeam` file in Sublime Text.
+2. Go to `Preferences` → `Settings - Syntax Specific`.
+3. Add the following line to the user settings (right pane):
 
 ```json
-"file_settings": [
-  {
-    "selector": "source.jbeam",
-    "settings": {
-      "color_scheme": "Packages/JBeam/JBeam Dark.sublime-color-scheme"
-    }
-  }
-]
+{
+    "color_scheme": "Packages/JBeam/JBeam Dark.sublime-color-scheme"
+}
 ```
 
 To apply globally
