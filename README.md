@@ -57,15 +57,11 @@ These top-level object keys receive bold styling to help navigate large jBeam fi
 
 
 
-## Color Schemes (Optional)
+## Color Schemes
 
-You do not need these color schemes. The syntax uses standard scopes and should look fine with Sublime defaults, or whatever scheme you already like.
+If you want VS Code-style colors, use the included `JBeam Dark` scheme or install a "VS Code Dark+" theme for Sublime Text. I recommended applying these only for .jbeam files. It still looks fine with Sublime defaults or whatever scheme you already like without this step.
 
-If you want them anyway:
-
-- `Preferences → Select Color Scheme...` → pick `JBeam Dark` or `JBeam Light`
-
-To apply only for `.jbeam` files, add this to your user settings:
+To apply vs-code style colors only for `.jbeam` files, add this to your user settings:
 
 ```json
 "file_settings": [
@@ -78,6 +74,9 @@ To apply only for `.jbeam` files, add this to your user settings:
 ]
 ```
 
+To apply globally
+
+- `Preferences → Select Color Scheme...` → pick `JBeam Dark` or `JBeam Light`
 
 ## License
 
